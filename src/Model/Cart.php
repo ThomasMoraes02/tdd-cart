@@ -18,6 +18,8 @@ class Cart
 
     private float $total = 0;
 
+    private float $subtotal = 0;
+
     private int $amount = 0;
 
     private CouponManager $couponManager;
@@ -47,6 +49,7 @@ class Cart
 
         $this->products[] = $product;
         $this->total += $product->getPrice();
+        $this->subtotal += $product->getPrice();
         $this->amount++;
 
         return $this;
@@ -66,6 +69,7 @@ class Cart
                 $foundProduct = true;
                 unset($this->products[$productKey]);
                 $this->total -= $product->getPrice();
+                $this->subtotal -= $product->getPrice();
                 $this->amount--;
                 break;
             }
@@ -141,6 +145,11 @@ class Cart
     public function getTotal(): float
     {
         return $this->total;
+    }
+
+    public function getSubtotal(): float
+    {
+        return $this->subtotal;
     }
 
     public function getAmount(): int
