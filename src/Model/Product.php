@@ -13,15 +13,13 @@ class Product
 
     private int $quantity;
 
-    private bool $hasInventory;
-
     public function __construct(string $name, float $price = 0, int $quantity = 1, ?int $id = null)
     {
         $this->name = $name;
         $this->price = $price;
         $this->quantity = $quantity;
 
-        $this->hasInventory = $this->hasInventory();
+        $this->hasInventory();
         $this->id = $id;
     }
 
@@ -51,8 +49,6 @@ class Product
     }
 
     /**
-     * Remove do inventário do produto
-     *
      * @param integer $quantity
      * @throws Exception
      * @return void
@@ -67,8 +63,6 @@ class Product
     }
 
     /**
-     * Adiciona ao inventário do produto
-     *
      * @param integer $quantity
      * @return void
      */
