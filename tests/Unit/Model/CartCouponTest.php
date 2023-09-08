@@ -24,29 +24,43 @@ class CartCouponTest extends TestCase
         $this->cart->addProduct($notebook);
     }
 
-    public function testApplyCoupon(): void
+    /**
+     * @dataProvider coupon100OFF
+     *
+     * @return void
+     */
+    public function testApplyCoupon(array $cupom100OFF): void
     {
-        $coupon100 = new Coupon('100OFF', '100 R$ OFF', 100);
-        $this->cart->addCoupon($coupon100);
+        $this->cart->addCoupon($cupom100OFF[0]);
 
         self::assertEquals(4400.00, $this->cart->getTotal());
         self::assertEquals('100 R$ OFF', $this->cart->getCoupons()[0]->getName());
     }
 
-    public function testApplySameCoupon(): void
+    /**
+     * @dataProvider coupon100OFF
+     *
+     * @param array $cupom100OFF
+     * @return void
+     */
+    public function testApplySameCoupon(array $coupon100OFF): void
     {
         self::expectException(Exception::class);
 
-        $coupon100 = new Coupon('100OFF', '100 R$ OFF', 100);
-        $this->cart->addCoupon($coupon100);
-        $this->cart->addCoupon($coupon100);
+        $this->cart->addCoupon($coupon100OFF[0]);
+        $this->cart->addCoupon($coupon100OFF[0]);
     }
 
-    public function testRemoveCoupon()
+    /**
+     * @dataProvider coupon100OFF
+     *
+     * @param array $coupon100OFF
+     * @return void
+     */
+    public function testRemoveCoupon(array $coupon100OFF): void
     {
-        $coupon100 = new Coupon('100OFF', '100 R$ OFF', 100);
-        $this->cart->addCoupon($coupon100);
-        $this->cart->removeCoupon($coupon100);
+        $this->cart->addCoupon($coupon100OFF[0]);
+        $this->cart->removeCoupon($coupon100OFF[0]);
 
         self::assertEquals(4500.00, $this->cart->getTotal());
         self::assertEmpty($this->cart->getCoupons());
@@ -75,5 +89,21 @@ class CartCouponTest extends TestCase
         $this->cart->removeCoupon($coupon10percent);
 
         self::assertEquals(4500, $this->cart->getTotal());
+    }
+
+    /**
+     * Data Provider coupon100OFF
+     *
+     * @return array
+     */
+    public function coupon100OFF(): array
+    {
+        $coupon100 = new Coupon('100OFF', '100 R$ OFF', 100);
+
+        return [
+            [
+                [$coupon100]
+            ]
+        ];
     }
 }
