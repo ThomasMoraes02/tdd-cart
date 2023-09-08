@@ -5,6 +5,7 @@ use Exception;
 use Cart\Model\User;
 use Cart\Model\Product;
 use Cart\Model\Services\Coupon\Coupon;
+use Cart\Model\Services\Coupon\CouponManager;
 
 class Cart
 {
@@ -19,13 +20,14 @@ class Cart
 
     private int $amount = 0;
 
-    /** @var Coupon[] */
-    private array $coupons = [];
+    private CouponManager $couponManager;
 
     public function __construct(User $user, ?int $id = null)
     {
         $this->user = $user;
         $this->id = $id;
+
+        $this->couponManager = new CouponManager($this);
     }
 
     /**
@@ -83,28 +85,21 @@ class Cart
      * @throws Exception
      * @return self
      */
-    public function addCoupon(Coupon $coupon): self 
+    public function addCoupon(Coupon $coupon): void 
     {
-        foreach($this->coupons as $coupon) {
-            if($coupon->getCode() == $coupon->getCode()) {
-                throw new Exception("O cupom {$coupon->getCode()} já foi aplicado.");
-            }
-        }
-
-        $this->applyCoupon($coupon);
-        return $this;
+        $cartTotal = $this->couponManager->applyCouponToCart($coupon);
+        $this->recalculate($cartTotal);
     }
 
     /**
-     * Apply Coupon
+     * Recalculate cart total
      *
      * @param Coupon $coupon
      * @return void
      */
-    public function applyCoupon(Coupon $coupon): void
+    private function recalculate(float $cartTotal): void
     {
-        $this->total -= $coupon->getValue();
-        $this->coupons[] = $coupon;
+        $this->total = $cartTotal;
 
         if($this->total < 0) {
             $this->total = 0;
@@ -119,18 +114,13 @@ class Cart
      */
     public function removeCoupon(Coupon $coupon): void
     {
-        foreach($this->coupons as $couponKey => $couponCart) {
-            if($couponCart == $coupon) {
-                unset($this->coupons[$couponKey]);
-                $this->total += $coupon->getValue();
-                break;
-            }
-        }
+        $cartTotal = $this->couponManager->removeCouponToCart($coupon);
+        $this->recalculate($cartTotal);
     }
 
     public function getCoupons(): array
     {
-        return $this->coupons;
+        return $this->couponManager->getCoupons();
     }
 
     public function getId(): ?int
