@@ -4,6 +4,7 @@ namespace Cart\Model;
 use Exception;
 use Cart\Model\User;
 use Cart\Model\Product;
+use Cart\Model\Services\Coupon\Coupon;
 
 class Cart
 {
@@ -17,6 +18,9 @@ class Cart
     private float $total = 0;
 
     private int $amount = 0;
+
+    /** @var Coupon[] */
+    private array $coupons = [];
 
     public function __construct(User $user, ?int $id = null)
     {
@@ -70,6 +74,63 @@ class Cart
         }
 
         return $this;
+    }
+
+    /**
+     * Add coupon to cart
+     *
+     * @param Coupon $coupon
+     * @throws Exception
+     * @return self
+     */
+    public function addCoupon(Coupon $coupon): self 
+    {
+        foreach($this->coupons as $coupon) {
+            if($coupon->getCode() == $coupon->getCode()) {
+                throw new Exception("O cupom {$coupon->getCode()} já foi aplicado.");
+            }
+        }
+
+        $this->applyCoupon($coupon);
+        return $this;
+    }
+
+    /**
+     * Apply Coupon
+     *
+     * @param Coupon $coupon
+     * @return void
+     */
+    public function applyCoupon(Coupon $coupon): void
+    {
+        $this->total -= $coupon->getValue();
+        $this->coupons[] = $coupon;
+
+        if($this->total < 0) {
+            $this->total = 0;
+        }
+    }
+
+    /**
+     * Remove coupon
+     *
+     * @param Coupon $coupon
+     * @return void
+     */
+    public function removeCoupon(Coupon $coupon): void
+    {
+        foreach($this->coupons as $couponKey => $couponCart) {
+            if($couponCart == $coupon) {
+                unset($this->coupons[$couponKey]);
+                $this->total += $coupon->getValue();
+                break;
+            }
+        }
+    }
+
+    public function getCoupons(): array
+    {
+        return $this->coupons;
     }
 
     public function getId(): ?int

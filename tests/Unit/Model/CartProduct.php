@@ -9,7 +9,7 @@ use Cart\Model\Product;
 use PHPUnit\Framework\TestCase;
 use Cart\Model\ValueObjects\Email;
 
-class CartTest extends TestCase
+class CartProduct extends TestCase
 {
     private Cart $cart;
 
