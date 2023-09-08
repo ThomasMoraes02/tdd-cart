@@ -1,6 +1,7 @@
 <?php 
-namespace Cart\Persistance;
+namespace Cart\Infra\Persistance;
 
+use Cart\Infra\Factories\UserFactory;
 use PDO;
 use Cart\Model\Repository\UserRepository;
 use Cart\Model\User;
@@ -10,20 +11,29 @@ class UserRepositoryMysql implements UserRepository
 {
     private PDO $pdo;
 
-    public function __construct(PDO $pdo)
+    private UserFactory $userFactory;
+
+    public function __construct(PDO $pdo, UserFactory $userFactory)
     {
         $this->pdo = $pdo;
+        $this->userFactory = $userFactory;
     }
 
     public function save(User $user): User
     {
-        $sql = 'INSERT INTO users (name, email) VALUES (:name, :email)';
+        $sql = 'INSERT INTO users (name, email, password) VALUES (:name, :email, :password)';
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue('name', $user->getName());
         $stmt->bindValue('email', $user->getEmail());
+        $stmt->bindValue('password', $user->getPassword());
         $stmt->execute();
 
-        return new User($user->getName(), new Email($user->getEmail()), $this->pdo->lastInsertId());
+        return $this->userFactory->create(
+            $user->getName(), 
+            $user->getEmail(), 
+            $user->getPassword(), 
+            $this->pdo->lastInsertId()
+        );
     }
 
     public function findByEmail(Email $email): ?User
@@ -35,6 +45,15 @@ class UserRepositoryMysql implements UserRepository
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $user ? new User($user['name'], new Email($user['email']), $user['id']) : null;
+        if (!$user) {
+            return null;
+        }
+
+        return $this->userFactory->create(
+            $user['name'],
+            $user['email'],
+            $user['password'],
+            $user['id']
+        );
     }
 }

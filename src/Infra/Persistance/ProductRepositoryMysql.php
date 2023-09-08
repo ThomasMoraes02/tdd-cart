@@ -1,5 +1,5 @@
 <?php 
-namespace Cart\Persistance;
+namespace Cart\Infra\Persistance;
 
 use PDO;
 use Cart\Model\Product;
