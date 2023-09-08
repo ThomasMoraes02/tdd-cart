@@ -1,6 +1,7 @@
 <?php 
 namespace Cart\Tests\Unit\Model;
 
+use Cart\Infra\EncoderArgon2ID;
 use Exception;
 use Cart\Model\Cart;
 use Cart\Model\User;
@@ -14,7 +15,8 @@ class CartTest extends TestCase
 
     protected function setUp(): void
     {
-        $user = new User('Thomas Moraes', new Email('thomas@gmail.com'));
+        $encoder = new EncoderArgon2ID();
+        $user = new User('Thomas Moraes', new Email('thomas@gmail.com'), $encoder);
         $this->cart = new Cart($user);
     }
 

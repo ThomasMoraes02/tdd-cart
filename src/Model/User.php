@@ -1,6 +1,7 @@
 <?php 
 namespace Cart\Model;
 
+use Cart\Model\Encoder;
 use Cart\Model\ValueObjects\Email;
 
 class User
@@ -11,10 +12,16 @@ class User
 
     private Email $email;
 
-    public function __construct(string $name, Email $email, ?int $id = null)
+    private Encoder $encoder;
+
+    private string $password;
+
+    public function __construct(string $name, Email $email, Encoder $encoder, ?int $id = null)
     {
         $this->name = $name;
         $this->email = $email;
+        $this->encoder = $encoder;
+        $this->password = '';
         $this->id = $id;
     }
 
@@ -31,5 +38,20 @@ class User
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $this->encoder->encode($password);
+    }
+
+    public function checkPassword(string $password): bool
+    {
+        return $this->encoder->decode($password, $this->password);
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
     }
 }
