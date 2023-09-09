@@ -34,7 +34,7 @@ class CartCouponTest extends TestCase
         $this->cart->addCoupon($cupom100OFF[0]);
 
         self::assertEquals(4400.00, $this->cart->getTotal());
-        self::assertEquals('100 R$ OFF', $this->cart->getCoupons()[0]->getName());
+        self::assertEquals('100 R$ OFF', $this->cart->getCoupons()[0]['coupon']->getName());
     }
 
     /**
@@ -102,9 +102,26 @@ class CartCouponTest extends TestCase
         $this->cart->addCoupon($coupon50Of);
         $this->cart->addCoupon($coupon20PercentOff);
 
-        self::assertEquals('50OFF', $this->cart->getCoupons()[0]->getCode());
-        self::assertEquals('20OFF', $this->cart->getCoupons()[1]->getCode());
+        self::assertEquals('50OFF', $this->cart->getCoupons()[0]['coupon']->getCode());
+        self::assertEquals('20OFF', $this->cart->getCoupons()[1]['coupon']->getCode());
         self::assertEquals(3560, $this->cart->getTotal());
+    }
+
+    public function testRemoveCouponsWithDifferentRules()
+    {
+        $coupon50Of = new Coupon('50OFF', '50% OFF', 50);
+        $coupon20PercentOff = new Coupon('20OFF', '20% OFF', 20);
+        $coupon20PercentOff->configureRules([
+            'type' => 'percentage'
+        ]);
+
+        $this->cart->addCoupon($coupon50Of);
+        $this->cart->addCoupon($coupon20PercentOff);
+
+        $this->cart->removeCoupon($coupon50Of);
+        $this->cart->removeCoupon($coupon20PercentOff);
+
+        self::assertEquals(4500, $this->cart->getTotal());
     }
 
     /**

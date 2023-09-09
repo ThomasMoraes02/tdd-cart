@@ -91,23 +91,7 @@ class Cart
      */
     public function addCoupon(Coupon $coupon): void 
     {
-        $cartTotal = $this->couponManager->applyCoupon($coupon);
-        $this->recalculate($cartTotal);
-    }
-
-    /**
-     * Recalculate cart total
-     *
-     * @param Coupon $coupon
-     * @return void
-     */
-    private function recalculate(float $cartTotal): void
-    {
-        $this->total = $cartTotal;
-
-        if($this->total < 0) {
-            $this->total = 0;
-        }
+        $this->total = max(0, $this->couponManager->applyCoupon($coupon));
     }
 
     /**
@@ -118,8 +102,7 @@ class Cart
      */
     public function removeCoupon(Coupon $coupon): void
     {
-        $cartTotal = $this->couponManager->removeCoupon($coupon);
-        $this->recalculate($cartTotal);
+        $this->total = max(0, $this->couponManager->removeCoupon($coupon));
     }
 
     public function getCoupons(): array

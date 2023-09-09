@@ -24,14 +24,16 @@ class CouponManager
      */
     public function applyCoupon(Coupon $coupon): float
     {
-        foreach($this->coupons as $cartCoupon) {
-            if($cartCoupon->getCode() == $coupon->getCode()) {
+        foreach($this->coupons as $couponCart) {
+            if($couponCart['coupon']->getCode() == $coupon->getCode()) {
                 throw new Exception("O cupom {$coupon->getCode()} já foi aplicado.");
             }
         }
 
-        $this->coupons[] = $coupon;
-        return $this->cart->getTotal() - $this->calculateRule($coupon, $this->cart->getTotal());
+        $discount = $this->calculateRule($coupon, $this->cart->getTotal());
+        $this->coupons[] = ['coupon' => $coupon, 'discount' => $discount];
+
+        return $this->cart->getTotal() - $discount;
     }
 
     /**
@@ -42,11 +44,10 @@ class CouponManager
      */
     public function removeCoupon(Coupon $coupon): float
     {
-        foreach($this->coupons as $couponKey => $couponCart) {
-            if($couponCart == $coupon) {
-                unset($this->coupons[$couponKey]);
-                return $this->cart->getTotal() + $this->calculateRule($coupon, $this->cart->getSubtotal());
-                break;
+        foreach($this->coupons as $key => $couponCart) {
+            if($couponCart['coupon'] == $coupon) {
+                unset($this->coupons[$key]);
+                return $this->cart->getTotal() + $couponCart['discount'];
             }
         }
     }
@@ -57,16 +58,15 @@ class CouponManager
      * @param Coupon $coupon
      * @return float
      */
-    private function calculateRule(Coupon $coupon, float $baseValue = 0): float
+    private function calculateRule(Coupon $coupon): float
     {
         switch ($coupon->getType()) {
             case CouponTypes::PERCENTAGE:
-                return ($baseValue * $coupon->getValue() / 100);
+                return ($this->cart->getTotal() * $coupon->getValue() / 100);
                 break;
-            
-            default:
+
+            case CouponTypes::FIXED:
                 return $coupon->getValue();
-                break;
         }
     }
 
