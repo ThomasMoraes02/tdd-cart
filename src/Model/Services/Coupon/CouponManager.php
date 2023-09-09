@@ -6,8 +6,6 @@ use Cart\Model\Cart;
 
 class CouponManager
 {
-    private float $cartSubtotal = 0;
-
     /** @var Coupon[] */
     private array $coupons = [];
 
@@ -16,7 +14,6 @@ class CouponManager
     public function __construct(Cart $cart)
     {
         $this->cart = $cart;
-        $this->cartSubtotal = $this->cart->getSubtotal();
     }
 
     /**
@@ -25,16 +22,16 @@ class CouponManager
      * @param Coupon $coupon
      * @return float
      */
-    public function applyCouponToCart(Coupon $coupon): float
+    public function applyCoupon(Coupon $coupon): float
     {
-        foreach($this->coupons as $coupon) {
-            if($coupon->getCode() == $coupon->getCode()) {
+        foreach($this->coupons as $cartCoupon) {
+            if($cartCoupon->getCode() == $coupon->getCode()) {
                 throw new Exception("O cupom {$coupon->getCode()} já foi aplicado.");
             }
         }
 
-        $this->coupons[] = $coupon;  
-        return $this->cart->getSubtotal() - $this->calculateRule($coupon);
+        $this->coupons[] = $coupon;
+        return $this->cart->getTotal() - $this->calculateRule($coupon, $this->cart->getTotal());
     }
 
     /**
@@ -43,17 +40,15 @@ class CouponManager
      * @param Coupon $coupon
      * @return float
      */
-    public function removeCouponToCart(Coupon $coupon): float
+    public function removeCoupon(Coupon $coupon): float
     {
         foreach($this->coupons as $couponKey => $couponCart) {
             if($couponCart == $coupon) {
                 unset($this->coupons[$couponKey]);
-                $this->cartSubtotal = $this->cart->getTotal() + $this->calculateRule($coupon);
+                return $this->cart->getTotal() + $this->calculateRule($coupon, $this->cart->getSubtotal());
                 break;
             }
         }
-
-        return $this->cartSubtotal;
     }
 
     /**
@@ -62,11 +57,11 @@ class CouponManager
      * @param Coupon $coupon
      * @return float
      */
-    private function calculateRule(Coupon $coupon): float
+    private function calculateRule(Coupon $coupon, float $baseValue = 0): float
     {
         switch ($coupon->getType()) {
             case CouponTypes::PERCENTAGE:
-                return ($this->cart->getSubtotal() * $coupon->getValue() / 100);
+                return ($baseValue * $coupon->getValue() / 100);
                 break;
             
             default:
@@ -75,6 +70,11 @@ class CouponManager
         }
     }
 
+    /**
+     * Get All Coupons
+     *
+     * @return array
+     */
     public function getCoupons(): array
     {
         return $this->coupons;

@@ -91,7 +91,7 @@ class Cart
      */
     public function addCoupon(Coupon $coupon): void 
     {
-        $cartTotal = $this->couponManager->applyCouponToCart($coupon);
+        $cartTotal = $this->couponManager->applyCoupon($coupon);
         $this->recalculate($cartTotal);
     }
 
@@ -118,7 +118,7 @@ class Cart
      */
     public function removeCoupon(Coupon $coupon): void
     {
-        $cartTotal = $this->couponManager->removeCouponToCart($coupon);
+        $cartTotal = $this->couponManager->removeCoupon($coupon);
         $this->recalculate($cartTotal);
     }
 
