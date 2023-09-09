@@ -1,9 +1,9 @@
 <?php 
 namespace Cart\Infra\Services;
 
-use Cart\Model\ValueObjects\Email;
-use Cart\Model\Services\Email\SendMail;
 use DomainException;
+use Cart\Model\ValueObjects\Email;
+use Cart\Model\Services\Mail\SendMail;
 
 class Mail implements SendMail
 {
@@ -17,10 +17,6 @@ class Mail implements SendMail
      */
     public function send(Email $to, string $subject, string $message): void
     {
-        $success = mail($to, $subject, $message);
-
-        if (!$success) {
-            throw new DomainException('Não foi possível enviar o e-mail.');
-        }
+        mail($to, $subject, $message);
     }
 }

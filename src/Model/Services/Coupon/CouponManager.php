@@ -67,6 +67,7 @@ class CouponManager
 
             case CouponTypes::FIXED:
                 return $coupon->getValue();
+                break;
         }
     }
 

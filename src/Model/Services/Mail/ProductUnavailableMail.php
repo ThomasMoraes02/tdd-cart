@@ -4,7 +4,7 @@ namespace Cart\Model\Services\Mail;
 use Cart\Model\User;
 use Cart\Model\Product;
 
-class ProductUnavailable
+class ProductUnavailableMail
 {
     private SendMail $sendMail;
 

@@ -1,5 +1,5 @@
 <?php 
-namespace Cart\Tests\Unit\Model;
+namespace Cart\Tests\Unit\Model\Service;
 
 use Exception;
 use Cart\Model\Cart;

@@ -56,10 +56,7 @@ class Product
     public function removeFromInventory(int $quantity): void
     {
         $this->quantity -= $quantity;
-
-        if($this->quantity < 0) {
-            throw new Exception('O produto não possui mais estoque disponível');
-        }
+        $this->quantity = max(0, $this->quantity);
     }
 
     /**

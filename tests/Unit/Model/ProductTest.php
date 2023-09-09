@@ -32,8 +32,8 @@ class ProductTest extends TestCase
 
     public function testZeroInventory()
     {
-        self::expectException(Exception::class);
         $this->product->removeFromInventory(4);
+        self::assertEquals(0, $this->product->getQuantity());
     }
 
     public function testAddToInventory()
