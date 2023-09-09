@@ -14,7 +14,7 @@ class ProductRepositoryMysqlTest extends TestCase
     private ProductRepository $productRepository;
 
     /**
-     * É executando antes de iniciar a bateria de testes
+     * É executado antes de iniciar a bateria de testes
      *
      * @return void
      */
