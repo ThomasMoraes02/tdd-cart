@@ -124,6 +124,18 @@ class CartCouponTest extends TestCase
         self::assertEquals(4500, $this->cart->getTotal());
     }
 
+    public function testApplyCouponWith100PercentDiscount()
+    {
+        $coupon100PercentOff = new Coupon('100OFF', '100% OFF', 100);
+        $coupon100PercentOff->configureRules([
+            'type' => 'percentage'
+        ]);
+
+        $this->cart->addCoupon($coupon100PercentOff);
+
+        self::assertEquals(0, $this->cart->getTotal());
+    }
+
     /**
      * Data Provider coupon100OFF
      *
