@@ -49,7 +49,7 @@ class ProductRepositoryMysql implements ProductRepository
 
         $stmt->execute();
 
-        return $this->findById($id);
+        return new Product($product->getName(), $product->getPrice(), $product->getQuantity(), $id);
     }
 
     public function delete(int $id): bool
