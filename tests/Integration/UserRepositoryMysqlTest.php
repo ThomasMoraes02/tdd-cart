@@ -5,6 +5,7 @@ use Cart\Infra\EncoderArgon2ID;
 use Cart\Infra\Factories\UserFactory;
 use Cart\Infra\Persistance\UserRepositoryMysql;
 use Cart\Model\Repository\UserRepository;
+use Cart\Model\ValueObjects\Phone;
 use PDO;
 use PHPUnit\Framework\TestCase;
 
@@ -25,7 +26,7 @@ class UserRepositoryMysqlTest extends TestCase
     {
         self::$pdo = new PDO('sqlite:memory:');
         self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        self::$pdo->exec("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, email TEXT, password LONGTEXT)");   
+        self::$pdo->exec("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, email TEXT, password LONGTEXT, phone_area INTEGER, phone_number INTEGER);");   
     }
 
     /**
@@ -56,6 +57,21 @@ class UserRepositoryMysqlTest extends TestCase
         self::assertEquals('Thomas Moraes', $user->getName());
         self::assertTrue($user->checkPassword('123456'));
         self::assertFalse($user->checkPassword('1234567'));
+        self::assertNull($user->getPhone());
+    }
+
+    public function testCreateUserWithPhoneInRepository()
+    {
+        $user = $this->userFactory->create('Bolt Moraes', 'bolt@gmail.com', '654321');
+        $user->addPhone(new Phone('11', '987654321'));
+
+        $this->userRepository->save($user);
+        $this->userRepository->findByEmail($user->getEmail());
+
+        self::assertEquals('Bolt Moraes', $user->getName());
+        self::assertEquals('987654321', $user->getPhone()->getNumber());
+        self::assertEquals('11', $user->getPhone()->getAreaCode());
+        self::assertEquals('11987654321', $user->getPhone());
     }
 
     /**

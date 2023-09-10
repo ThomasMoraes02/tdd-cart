@@ -17,7 +17,7 @@ class User
 
     private string $password;
 
-    private Phone $phone;
+    private ?Phone $phone;
 
     public function __construct(string $name, Email $email, Encoder $encoder, ?int $id = null)
     {
@@ -25,6 +25,7 @@ class User
         $this->email = $email;
         $this->encoder = $encoder;
         $this->password = '';
+        $this->phone = null;
         $this->id = $id;
     }
 
@@ -33,7 +34,7 @@ class User
         $this->phone = $phone;
     }
 
-    public function getPhone(): Phone
+    public function getPhone(): ?Phone
     {
         return $this->phone;
     }

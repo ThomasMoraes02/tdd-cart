@@ -6,6 +6,7 @@ use PDO;
 use Cart\Model\Repository\UserRepository;
 use Cart\Model\User;
 use Cart\Model\ValueObjects\Email;
+use Cart\Model\ValueObjects\Phone;
 
 class UserRepositoryMysql implements UserRepository
 {
@@ -21,19 +22,31 @@ class UserRepositoryMysql implements UserRepository
 
     public function save(User $user): User
     {
-        $sql = 'INSERT INTO users (name, email, password) VALUES (:name, :email, :password)';
+        $sql = 'INSERT INTO users (name, email, password, phone_area, phone_number) VALUES (:name, :email, :password, :phone_area, :phone_number);';
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue('name', $user->getName());
         $stmt->bindValue('email', $user->getEmail());
         $stmt->bindValue('password', $user->getPassword());
+
+        if($user->getPhone()) {
+            $stmt->bindValue('phone_area', $user->getPhone()->getAreaCode());
+            $stmt->bindValue('phone_number', $user->getPhone()->getNumber());
+        }
+
         $stmt->execute();
 
-        return $this->userFactory->create(
+        $user = $this->userFactory->create(
             $user->getName(), 
             $user->getEmail(), 
             $user->getPassword(), 
             $this->pdo->lastInsertId()
         );
+
+        if($user->getPhone()) {
+            $user->addPhone(new Phone($user->getPhone()->getAreaCode(), $user->getPhone()->getNumber()));
+        }
+
+        return $user;
     }
 
     public function findByEmail(Email $email): ?User
@@ -49,11 +62,17 @@ class UserRepositoryMysql implements UserRepository
             return null;
         }
 
-        return $this->userFactory->create(
+        $user = $this->userFactory->create(
             $user['name'],
             $user['email'],
             $user['password'],
             $user['id']
         );
+
+        if($user->getPhone()) {
+            $user->addPhone(new Phone($user->getPhone()->getAreaCode(), $user->getPhone()->getNumber()));
+        }
+
+        return $user;
     }
 }
