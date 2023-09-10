@@ -36,20 +36,25 @@ class Cart
      * Add product to cart
      *
      * @param Product $product
+     * @param int $quantity
      * @throws Exception
      * @return self
      */
-    public function addProduct(Product $product): self
+    public function addProduct(Product $product, int $quantity = 1): self
     {
         if(!$product->hasInventory()) {
             throw new Exception("O produto {$product->getName()} está indisponível no momento.");
         }
 
-        $product->removeFromInventory(1);
+        if($product->getQuantity() < $quantity) {
+            throw new Exception("O produto {$product->getName()} possui apenas {$product->getQuantity()} unidades.");
+        }
+
+        $product->removeFromInventory($quantity);
 
         $this->products[] = $product;
-        $this->total += $product->getPrice();
-        $this->subtotal += $product->getPrice();
+        $this->total += ($product->getPrice() * $quantity);
+        $this->subtotal += ($product->getPrice() * $quantity);
         $this->amount++;
 
         return $this;
@@ -59,17 +64,25 @@ class Cart
      * Remove product from cart
      *
      * @param Product $product
+     * @param int $quantity
      * @return self
      */
-    public function removeProduct(Product $product): self
+    public function removeProduct(Product $product, int $quantity = 1): self
     {
         $foundProduct = false;
         foreach($this->products as $productKey => $productCart) {
             if($productCart == $product) {
                 $foundProduct = true;
-                unset($this->products[$productKey]);
-                $this->total -= $product->getPrice();
-                $this->subtotal -= $product->getPrice();
+
+                $productQuantity = ($quantity > $product->getQuantity()) ? ($quantity - $product->getQuantity()) : $quantity;
+                $productCart->addToInventory($productQuantity);
+
+                if($quantity > $productCart->getQuantity()) {
+                    unset($this->products[$productKey]);
+                }
+
+                $this->total -= ($product->getPrice() * $quantity);
+                $this->subtotal -= ($product->getPrice() * $quantity);
                 $this->amount--;
                 break;
             }
