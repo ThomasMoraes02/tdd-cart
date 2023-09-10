@@ -75,7 +75,7 @@ class Cart
                 $foundProduct = true;
 
                 $productQuantity = ($quantity > $product->getQuantity()) ? ($quantity - $product->getQuantity()) : $quantity;
-                $productCart->addToInventory($productQuantity);
+                $product->addToInventory($productQuantity);
 
                 if($quantity > $productCart->getQuantity()) {
                     unset($this->products[$productKey]);
