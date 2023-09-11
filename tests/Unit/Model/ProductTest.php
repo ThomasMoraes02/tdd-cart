@@ -1,6 +1,7 @@
 <?php 
 namespace Cart\Tests\Unit\Model;
 
+use Cart\Model\Product\Category;
 use Exception;
 use Cart\Model\Product\Product;
 use PHPUnit\Framework\TestCase;
@@ -40,5 +41,18 @@ class ProductTest extends TestCase
     {
         $this->product->addToInventory(6);
         self::assertEquals(9, $this->product->getQuantity());
+    }
+
+    public function testCreateProductWithCategories()
+    {
+        $product = new Product('TDD Testes com PHP Unit', 27.80, 100);
+        $product
+        ->addCategory(new Category('Livros'))
+        ->addCategory(new Category('Programação'))
+        ->addCategory(new Category('PHP'))
+        ->addCategory(new Category('Testes'));
+
+        self::assertEquals('Livros', $product->getCategories()[0]->getName());
+        self::assertCount(4, $product->getCategories());
     }
 }
