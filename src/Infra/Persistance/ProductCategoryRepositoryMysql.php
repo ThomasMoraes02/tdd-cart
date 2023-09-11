@@ -74,15 +74,4 @@ class ProductCategoryRepositoryMysql implements ProductCategoryRepository
 
         return $statement->fetchAll(PDO::FETCH_ASSOC) ?? [];
     }
-
-    public function findAllProductsByCategory(Category $category): array
-    {
-        $sql = "SELECT * FROM product_categories WHERE category_id = :category_id";
-        $statement = $this->pdo->prepare($sql);
-        $statement->bindValue(':category_id', $category->getId());
-
-        $statement->execute();
-
-        return $statement->fetchAll(PDO::FETCH_ASSOC) ?? [];
-    }
 }

@@ -14,6 +14,4 @@ interface ProductCategoryRepository
     public function delete(int $id): bool;
 
     public function findAll(): array;
-
-    public function findAllProductsByCategory(Category $category): array;
 }
