@@ -19,7 +19,7 @@ class CategoryRepositoryMysqlTest extends TestCase
     {
         self::$pdo = new PDO('sqlite::memory:');
         self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);   
-        self::$pdo->exec("CREATE TABLE IF NOT EXISTS product_categories (id INTEGER PRIMARY KEY, name TEXT)");
+        self::$pdo->exec("CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY, name TEXT)");
     }
 
     /**

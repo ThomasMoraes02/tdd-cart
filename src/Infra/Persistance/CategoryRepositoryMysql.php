@@ -16,7 +16,7 @@ class CategoryRepositoryMysql implements CategoryRepository
 
     public function save(Category $category): Category
     {
-        $sql = "INSERT INTO product_categories (name) VALUES (:name)";
+        $sql = "INSERT INTO categories (name) VALUES (:name)";
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(':name', $category->getName());
         $statement->execute();
@@ -26,7 +26,7 @@ class CategoryRepositoryMysql implements CategoryRepository
 
     public function findById(int $id): ?Category
     {
-        $sql = "SELECT * FROM product_categories WHERE id = :id";
+        $sql = "SELECT * FROM categories WHERE id = :id";
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(':id', $id);
         
@@ -44,7 +44,7 @@ class CategoryRepositoryMysql implements CategoryRepository
 
     public function update(int $id, Category $category): ?Category
     {
-        $sql = "UPDATE product_categories SET name = :name WHERE id = :id";
+        $sql = "UPDATE categories SET name = :name WHERE id = :id";
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(':name', $category->getName());
         $statement->bindValue(':id', $id);
@@ -58,7 +58,7 @@ class CategoryRepositoryMysql implements CategoryRepository
 
     public function delete(int $id): bool
     {
-        $sql = "DELETE FROM product_categories WHERE id = :id";
+        $sql = "DELETE FROM categories WHERE id = :id";
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(':id', $id);
 
@@ -67,7 +67,7 @@ class CategoryRepositoryMysql implements CategoryRepository
 
     public function findAll(): array
     {
-        $sql = "SELECT * FROM product_categories";
+        $sql = "SELECT * FROM categories";
         $statement = $this->pdo->prepare($sql);
         $statement->execute();
 
