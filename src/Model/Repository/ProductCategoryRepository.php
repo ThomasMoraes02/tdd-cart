@@ -3,7 +3,7 @@ namespace Cart\Model\Repository;
 
 use Cart\Model\Product\Category;
 
-interface ProductCategory
+interface ProductCategoryRepository
 {
     public function save(Category $category): Category;
 
