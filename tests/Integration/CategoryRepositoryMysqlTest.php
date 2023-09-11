@@ -1,17 +1,19 @@
 <?php 
 namespace Cart\Tests\Integration;
 
+use Cart\Infra\Persistance\CategoryRepositoryMysql;
 use Cart\Infra\Persistance\ProductCategoryRepositoryMysql;
 use Cart\Model\Product\Category;
+use Cart\Model\Repository\CategoryRepository;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use Cart\Model\Repository\ProductCategoryRepository;
 
-class ProductCategoryMysqlTest extends TestCase
+class CategoryRepositoryMysqlTest extends TestCase
 {
     private static PDO $pdo;
 
-    private ProductCategoryRepository $productCategoryRepository;
+    private CategoryRepository $categoryRepository;
 
     public static function setUpBeforeClass(): void
     {
@@ -25,28 +27,28 @@ class ProductCategoryMysqlTest extends TestCase
      * */
     public function setUp(): void
     {
-        $this->productCategoryRepository = new ProductCategoryRepositoryMysql(self::$pdo);
+        $this->categoryRepository = new CategoryRepositoryMysql(self::$pdo);
         self::$pdo->beginTransaction();
 
-        $this->productCategoryRepository->save(new Category('Livros'));
-        $this->productCategoryRepository->save(new Category('Programação'));
-        $this->productCategoryRepository->save(new Category('PHP'));
-        $this->productCategoryRepository->save(new Category('Testes'));
+        $this->categoryRepository->save(new Category('Livros'));
+        $this->categoryRepository->save(new Category('Programação'));
+        $this->categoryRepository->save(new Category('PHP'));
+        $this->categoryRepository->save(new Category('Testes'));
     }
 
     public function testSaveCategoriesInRepository(): void
     {
-        $categories = $this->productCategoryRepository->findAll();
+        $categories = $this->categoryRepository->findAll();
         self::assertCount(4, $categories);
     }
 
     public function testDeleteCategoriesInRepository(): void
     {
-        $this->productCategoryRepository->delete(1);
-        $this->productCategoryRepository->delete(3);
-        $this->productCategoryRepository->delete(4);
+        $this->categoryRepository->delete(1);
+        $this->categoryRepository->delete(3);
+        $this->categoryRepository->delete(4);
 
-        $categories = $this->productCategoryRepository->findAll();
+        $categories = $this->categoryRepository->findAll();
 
         self::assertCount(1, $categories);
     }
@@ -54,7 +56,7 @@ class ProductCategoryMysqlTest extends TestCase
     public function testUpdateCategoryInRepository()
     {
         $php8 = new Category('PHP 8');
-        $category = $this->productCategoryRepository->update(3, $php8);
+        $category = $this->categoryRepository->update(3, $php8);
 
         self::assertEquals('PHP 8', $category->getName());
     }

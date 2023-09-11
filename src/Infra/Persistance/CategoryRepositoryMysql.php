@@ -2,11 +2,10 @@
 namespace Cart\Infra\Persistance;
 
 use Cart\Model\Product\Category;
+use Cart\Model\Repository\CategoryRepository;
 use PDO;
-use Cart\Model\Repository\ProductCategory;
-use Cart\Model\Repository\ProductCategoryRepository;
 
-class ProductCategoryRepositoryMysql implements ProductCategoryRepository
+class CategoryRepositoryMysql implements CategoryRepository
 {
     private PDO $pdo;
 

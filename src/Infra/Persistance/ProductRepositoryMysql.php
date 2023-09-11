@@ -1,6 +1,7 @@
 <?php 
 namespace Cart\Infra\Persistance;
 
+use Cart\Model\Product\Category;
 use PDO;
 use Cart\Model\Product\Product;
 use Cart\Model\Repository\ProductRepository;
