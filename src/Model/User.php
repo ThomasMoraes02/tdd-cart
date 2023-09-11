@@ -2,6 +2,7 @@
 namespace Cart\Model;
 
 use Cart\Model\Encoder;
+use Cart\Model\ValueObjects\Address;
 use Cart\Model\ValueObjects\Email;
 use Cart\Model\ValueObjects\Phone;
 
@@ -19,6 +20,8 @@ class User
 
     private ?Phone $phone;
 
+    private ?Address $address;
+
     public function __construct(string $name, Email $email, Encoder $encoder, ?int $id = null)
     {
         $this->name = $name;
@@ -26,7 +29,18 @@ class User
         $this->encoder = $encoder;
         $this->password = '';
         $this->phone = null;
+        $this->address = null;
         $this->id = $id;
+    }
+
+    public function addAddress(Address $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
     }
 
     public function addPhone(Phone $phone): void

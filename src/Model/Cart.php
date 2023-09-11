@@ -6,6 +6,7 @@ use Cart\Model\User;
 use Cart\Model\Product;
 use Cart\Model\Services\Coupon\Coupon;
 use Cart\Model\Services\Coupon\CouponManager;
+use Cart\Model\Services\Shipping\ShippingService;
 
 class Cart
 {
@@ -22,11 +23,14 @@ class Cart
 
     private int $amount = 0;
 
+    private ?ShippingService $shipping;
+
     private CouponManager $couponManager;
 
-    public function __construct(User $user, ?int $id = null)
+    public function __construct(User $user, ?ShippingService $shipping = null, ?int $id = null)
     {
         $this->user = $user;
+        $this->shipping = $shipping;
         $this->id = $id;
 
         $this->couponManager = new CouponManager($this);
@@ -121,6 +125,11 @@ class Cart
     public function getCoupons(): array
     {
         return $this->couponManager->getCoupons();
+    }
+
+    public function getShipping(): ShippingService
+    {
+        return $this->shipping;
     }
 
     public function getId(): ?int
