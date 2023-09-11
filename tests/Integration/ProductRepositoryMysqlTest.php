@@ -5,7 +5,7 @@ use PDO;
 use PHPUnit\Framework\TestCase;
 use Cart\Model\Repository\ProductRepository;
 use Cart\Infra\Persistance\ProductRepositoryMysql;
-use Cart\Model\Product;
+use Cart\Model\Product\Product;
 
 class ProductRepositoryMysqlTest extends TestCase
 {

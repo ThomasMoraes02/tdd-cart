@@ -2,7 +2,7 @@
 namespace Cart\Tests\Unit\Infra;
 
 use Cart\Model\User;
-use Cart\Model\Product;
+use Cart\Model\Product\Product;
 use Cart\Infra\EncoderArgon2ID;
 use PHPUnit\Framework\TestCase;
 use Cart\Infra\Factories\UserFactory;

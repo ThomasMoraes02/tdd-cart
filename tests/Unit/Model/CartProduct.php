@@ -5,7 +5,7 @@ use Cart\Infra\EncoderArgon2ID;
 use Exception;
 use Cart\Model\Cart;
 use Cart\Model\User;
-use Cart\Model\Product;
+use Cart\Model\Product\Product;
 use PHPUnit\Framework\TestCase;
 use Cart\Model\ValueObjects\Email;
 

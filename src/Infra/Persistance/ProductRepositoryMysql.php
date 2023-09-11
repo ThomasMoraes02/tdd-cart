@@ -2,7 +2,7 @@
 namespace Cart\Infra\Persistance;
 
 use PDO;
-use Cart\Model\Product;
+use Cart\Model\Product\Product;
 use Cart\Model\Repository\ProductRepository;
 
 class ProductRepositoryMysql implements ProductRepository

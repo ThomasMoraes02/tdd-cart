@@ -1,7 +1,8 @@
 <?php 
-namespace Cart\Model;
+namespace Cart\Model\Product;
 
 use Exception;
+use Cart\Model\Product\Category;
 
 class Product
 {
@@ -13,14 +14,29 @@ class Product
 
     private int $quantity;
 
+    /** @var Category[] */
+    private array $categories;
+
     public function __construct(string $name, float $price = 0, int $quantity = 1, ?int $id = null)
     {
         $this->name = $name;
         $this->price = $price;
         $this->quantity = $quantity;
 
+        $this->categories = [];
         $this->hasInventory();
         $this->id = $id;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        $this->categories[] = $category;
+        return $this;
+    }
+
+    public function getCategories(): array
+    {
+        return $this->categories;
     }
 
     public function getId(): ?int

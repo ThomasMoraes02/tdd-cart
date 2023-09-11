@@ -2,7 +2,7 @@
 namespace Cart\Tests\Unit\Model;
 
 use Exception;
-use Cart\Model\Product;
+use Cart\Model\Product\Product;
 use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase

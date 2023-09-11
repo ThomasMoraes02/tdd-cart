@@ -3,7 +3,7 @@ namespace Cart\Tests\Unit\Model\Service;
 
 use Exception;
 use Cart\Model\Cart;
-use Cart\Model\Product;
+use Cart\Model\Product\Product;
 use Cart\Infra\EncoderArgon2ID;
 use PHPUnit\Framework\TestCase;
 use Cart\Infra\Factories\UserFactory;

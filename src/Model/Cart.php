@@ -3,7 +3,7 @@ namespace Cart\Model;
 
 use Exception;
 use Cart\Model\User;
-use Cart\Model\Product;
+use Cart\Model\Product\Product;
 use Cart\Model\Services\Coupon\Coupon;
 use Cart\Model\Services\Coupon\CouponManager;
 use Cart\Model\Services\Shipping\ShippingService;

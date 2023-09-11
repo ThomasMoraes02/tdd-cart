@@ -2,7 +2,7 @@
 namespace Cart\Model\Services\Mail;
 
 use Cart\Model\User;
-use Cart\Model\Product;
+use Cart\Model\Product\Product;
 
 class ProductUnavaibleMail
 {

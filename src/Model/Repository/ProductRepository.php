@@ -1,7 +1,7 @@
 <?php 
 namespace Cart\Model\Repository;
 
-use Cart\Model\Product;
+use Cart\Model\Product\Product;
 
 interface ProductRepository
 {
