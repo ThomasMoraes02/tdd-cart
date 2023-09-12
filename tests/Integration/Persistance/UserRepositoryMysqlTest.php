@@ -1,5 +1,5 @@
 <?php 
-namespace Cart\Tests\Integration;
+namespace Cart\Tests\Integration\Persistance;
 
 use Cart\Infra\EncoderArgon2ID;
 use Cart\Infra\Factories\UserFactory;

@@ -1,13 +1,11 @@
 <?php 
-namespace Cart\Tests\Integration;
+namespace Cart\Tests\Integration\Persistance;
 
 use Cart\Infra\Persistance\CategoryRepositoryMysql;
-use Cart\Infra\Persistance\ProductCategoryRepositoryMysql;
 use Cart\Model\Product\Category;
 use Cart\Model\Repository\CategoryRepository;
 use PDO;
 use PHPUnit\Framework\TestCase;
-use Cart\Model\Repository\ProductCategoryRepository;
 
 class CategoryRepositoryMysqlTest extends TestCase
 {

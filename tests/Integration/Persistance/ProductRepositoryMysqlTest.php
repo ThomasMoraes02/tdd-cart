@@ -1,5 +1,5 @@
 <?php 
-namespace Cart\Tests\Integration;
+namespace Cart\Tests\Integration\Persistance;
 
 use PDO;
 use PHPUnit\Framework\TestCase;

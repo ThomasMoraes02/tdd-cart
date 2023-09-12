@@ -1,5 +1,5 @@
 <?php 
-namespace Cart\Tests\Integration;
+namespace Cart\Tests\Integration\Persistance;
 
 use Cart\Infra\Persistance\CouponRepositoryMysql;
 use Cart\Model\Repository\CouponRepository;
