@@ -8,6 +8,8 @@ interface ProductCategoryRepository
 {
     public function save(Product $product): Product;
 
+    public function deleteAllCategoriesByProduct(Product $product): bool;
+
     public function findAllCategoriesByProduct(Product $product): array;
 
     public function findAllProductsByCategory(Category $category): array;

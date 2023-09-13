@@ -40,13 +40,22 @@ class ProductCategoryRepositoryMsql implements ProductCategoryRepository
         );
 
         foreach($categories as $categoryId) {
-            $category = $this->categoryRepository->findById($categoryId['id']);
+            $category = $this->categoryRepository->findById($categoryId['category_id']);
             if($category) {
                 $product->addCategory($category);
             }
         }
 
         return $product;
+    }
+
+    public function deleteAllCategoriesByProduct(Product $product): bool
+    {
+        $sql = 'DELETE FROM product_categories WHERE product_id = :product_id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':product_id', $product->getId(), PDO::PARAM_INT);
+        
+        return $stmt->execute();
     }
 
     public function findAllCategoriesByProduct(Product $product): array
