@@ -146,6 +146,22 @@ class ProductFactoryTest extends TestCase
         assertTrue($this->productFactory->delete($product->getId()));
     }
 
+    /**
+     * @dataProvider product
+     *
+     * @param array $productData
+     * @return void
+     */
+    public function testLoadProductInFactory(array $productData): void
+    {
+        $productSaved = $this->productFactory->create($productData);
+
+        $product = $this->productFactory->load($productSaved->getId());
+
+        self::assertInstanceOf(Product::class, $product);
+        self::assertNotEmpty($product->getCategories());
+    }
+
     public function product(): array
     {
         return [

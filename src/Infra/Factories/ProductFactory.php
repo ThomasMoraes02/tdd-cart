@@ -145,4 +145,32 @@ class ProductFactory
 
         return $this->productRepository->delete($id);
     }
+
+    /**
+     * Busca o Produto
+     *
+     * @param integer $id
+     * @return Product|null
+     */
+    public function load(int $id): ?Product
+    {
+        $product = $this->productRepository->findById($id);
+
+        if(!$product) {
+            return null;
+        }
+
+        $categories = $this->productCategoryRepository->findAllCategoriesByProduct($product);
+
+        if(!empty($categories)) {
+            foreach($categories as $categoryId) {
+                $category = $this->categoryRepository->findById($categoryId['category_id']);
+                if($category) {
+                    $product->addCategory($category);
+                }
+            }
+        }
+
+        return $product;
+    }
 }
