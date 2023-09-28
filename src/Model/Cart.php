@@ -59,7 +59,7 @@ class Cart
         $this->products[] = $product;
         $this->total += ($product->getPrice() * $quantity);
         $this->subtotal += ($product->getPrice() * $quantity);
-        $this->amount++;
+        $this->amount += $quantity;
 
         return $this;
     }
@@ -85,7 +85,7 @@ class Cart
                     unset($this->products[$productKey]);
                 }
 
-                $this->total -= ($product->getPrice() * $quantity);
+                $this->total = max(0, ($this->total -= ($product->getPrice() * $quantity)));
                 $this->subtotal -= ($product->getPrice() * $quantity);
                 $this->amount--;
                 break;

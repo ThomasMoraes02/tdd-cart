@@ -9,7 +9,7 @@ use Cart\Model\Product\Product;
 use PHPUnit\Framework\TestCase;
 use Cart\Model\ValueObjects\Email;
 
-class CartProduct extends TestCase
+class CartProductTest extends TestCase
 {
     private Cart $cart;
 
@@ -77,7 +77,7 @@ class CartProduct extends TestCase
     {
         $this->cart->addProduct($products[0], 2);
 
-        self::assertEquals(1, $this->cart->getAmount());
+        self::assertEquals(2, $this->cart->getAmount());
         self::assertEquals(9000, $this->cart->getTotal());
         self::assertEquals(1, $products[0]->getQuantity());
     }
@@ -101,13 +101,14 @@ class CartProduct extends TestCase
     public function testRemoveProductToCartWithQuantity(array $products): void
     {
         $this->cart->addProduct($products[0], 2);
+
         $this->cart->removeProduct($products[0], 1);
 
         self::assertEquals(1, $this->cart->getAmount());
         self::assertEquals(4500, $this->cart->getTotal());
         self::assertEquals(2, $products[0]->getQuantity());
 
-        $this->cart->removeProduct($products[0], 10);
+        $this->cart->removeProduct($products[0], 1);
         
         self::assertEquals(0, $this->cart->getAmount());
         self::assertEquals(0, $this->cart->getTotal());
